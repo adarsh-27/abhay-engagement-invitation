@@ -1,0 +1,72 @@
+"use client";
+import { motion } from "framer-motion";
+import { useState } from "react";
+
+export default function Envelope({ onOpen }: { onOpen: () => void }) {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleOpen = () => {
+        if (isOpen) return;
+        setIsOpen(true);
+        setTimeout(onOpen, 2000);
+    };
+
+    return (
+        <div className="flex h-screen w-screen items-center justify-center bg-[#FDFBF7] overflow-hidden">
+            <motion.div
+                className="relative w-full h-full md:w-[320px] md:h-[480px] cursor-pointer perspective-1000 md:rounded-2xl"
+                style={{ overflow: isOpen ? "visible" : "hidden" }}
+                onClick={handleOpen}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 1 }}
+            >
+
+                {/* 3. Bottom Flap */}
+                <img
+                    src="/lowerflap.png"
+                    alt="Bottom Flap"
+                    className="absolute bottom-0 left-0 right-0 w-full h-full object-cover z-25 pointer-events-none"
+                    style={{
+                        maskImage: "linear-gradient(to top, black 80%, transparent 100%)"
+                    }}
+                />
+
+                {/* 4. Top Flap (Animates Open) */}
+                <motion.div
+                    className="absolute top-[0%] left-0 right-0 h-full z-30 origin-top"
+                    initial={{ rotateX: 0, filter: "drop-shadow(0px 3px 5px rgba(0,0,0,0.2))" }}
+                    animate={{
+                        rotateX: isOpen ? 25 : 0,
+                        filter: isOpen ? "drop-shadow(0px 15px 20px rgba(0,0,0,0.6))" : "drop-shadow(0px 3px 5px rgba(0,0,0,0.2))"
+                    }}
+                    transition={{
+                        duration: 1.5, // Duration matches the rotation for sync
+                        ease: "easeInOut"
+                    }}
+                    style={{
+                        transformStyle: "preserve-3d",
+                    }}
+                >
+                    <img
+                        src="/upperflap.png"
+                        alt="Top Flap"
+                        className="absolute inset-0 w-full h-full scale-110"
+                    />
+
+
+                </motion.div>
+
+
+
+                <motion.p
+                    className="absolute bottom-44 left-0 right-0 text-center font-birthstone z-40 pointer-events-none text-[#E9AD3E] text-4xl capitalize"
+                    animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    This invitation is<br />exclusively for you
+                </motion.p>
+            </motion.div>
+        </div>
+    );
+}
