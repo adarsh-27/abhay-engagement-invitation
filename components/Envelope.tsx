@@ -1,9 +1,15 @@
-"use client";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { Volume2, VolumeX } from "lucide-react";
 
-export default function Envelope({ onOpen }: { onOpen: () => void }) {
+interface EnvelopeProps {
+    onOpen: () => void;
+    isPlaying?: boolean;
+    toggleAudio?: () => void;
+}
+
+export default function Envelope({ onOpen, isPlaying = false, toggleAudio }: EnvelopeProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [showHint, setShowHint] = useState(true);
 
@@ -90,6 +96,26 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                 >
                     ( Tap to Open )
                 </motion.p>
+
+                {/* Music Button */}
+                {toggleAudio && (
+                    <motion.button
+                        className="absolute bottom-6 right-6 z-50 p-3 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-[#D4AF37]/20 text-[#633d5c] hover:bg-white/50 transition-colors"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            toggleAudio();
+                        }}
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        whileTap={{ scale: 0.9 }}
+                    >
+                        {isPlaying ? (
+                            <Volume2 className="w-5 h-5" />
+                        ) : (
+                            <VolumeX className="w-5 h-5" />
+                        )}
+                    </motion.button>
+                )}
             </motion.div>
         </div>
     );

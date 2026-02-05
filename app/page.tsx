@@ -398,10 +398,64 @@ function InvitationContent() {
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true); // Aggressively assume playing
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  if (!isOpened) {
-    return <Envelope onOpen={() => setIsOpened(true)} />;
-  }
+  useEffect(() => {
+    // Attempt to play audio on load
+    const playAudio = async () => {
+      if (audioRef.current) {
+        try {
+          await audioRef.current.play();
+          // If successful, we are good.
+        } catch (err) {
+          console.log("Autoplay prevented. Waiting for interaction.", err);
+          // We keep isPlaying=true to show the "Speaker" icon (optimistic).
+          // We add one-time listeners to ALL interaction types to start music ASAP.
+          const startAudioOnInteraction = () => {
+            if (audioRef.current) {
+              audioRef.current.play().catch(e => console.error("Still blocked", e));
+            }
+            // Remove all listeners after first attempt
+            ['click', 'touchstart', 'keydown', 'scroll'].forEach(event =>
+              window.removeEventListener(event, startAudioOnInteraction)
+            );
+          };
 
-  return <InvitationContent />;
+          ['click', 'touchstart', 'keydown', 'scroll'].forEach(event =>
+            window.addEventListener(event, startAudioOnInteraction, { once: true })
+          );
+        }
+      }
+    };
+
+    playAudio();
+  }, []);
+
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (!audioRef.current.paused) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current.play().catch(e => console.error("Play failed", e));
+        setIsPlaying(true);
+      }
+    }
+  };
+
+  return (
+    <>
+      <audio ref={audioRef} src="/music.mp3" loop autoPlay />
+      {!isOpened ? (
+        <Envelope
+          onOpen={() => setIsOpened(true)}
+          isPlaying={isPlaying}
+          toggleAudio={toggleAudio}
+        />
+      ) : (
+        <InvitationContent />
+      )}
+    </>
+  );
 }
