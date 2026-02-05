@@ -1,7 +1,25 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import Envelope from "@/components/Envelope";
+
+import ganpatiImg from "@/app/assets/ganpati.png";
+import firstImageImg from "@/app/assets/firstImage.png";
+import ringBoxImg from "@/app/assets/ringBox.png";
+import ringImg from "@/app/assets/ring.png";
+import layer9Img from "@/app/assets/layer9.png";
+import layer8Img from "@/app/assets/layer8.png";
+import imageTwoImg from "@/app/assets/imageTwo.png";
+import swanImg from "@/app/assets/swan.png";
+import clockImg from "@/app/assets/clock.png";
+import kabutarImg from "@/app/assets/kabutar.png";
+import fullImg from "@/app/assets/full.png";
+import inviteesImg from "@/app/assets/invitees.png";
+import pinkRoseImg from "@/app/assets/pinkRose.png";
+import groupLogoImg from "@/app/assets/groupLogo.png";
+
+const MotionImage = motion(Image);
 
 function InvitationContent() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -86,8 +104,8 @@ function InvitationContent() {
         className="bg-[url('/firstBackground.png')] bg-cover bg-top pt-[20px] pb-12 px-6 h-screen min-h-screen relative z-30"
       >
         <div className="text-center mb-10">
-          <motion.img
-            src="/ganpati.png"
+          <MotionImage
+            src={ganpatiImg}
             alt="Ganpati"
             className="w-20 mx-auto mb-14 mt-6 opacity-90 drop-shadow-sm"
             initial={{ scale: 0, opacity: 0 }}
@@ -131,18 +149,19 @@ function InvitationContent() {
               }
             }}
           >
-            <img
-              src="/firstImage.png"
+            <Image
+              src={firstImageImg}
               alt="Couple"
               className="w-full h-full object-cover"
+              priority
             />
           </motion.div>
           <motion.div
             style={{ scale: boxScale, y: boxY }}
             className="absolute bottom-[-180px] left-[-50px] w-[250px] z-10 origin-center"
           >
-            <img
-              src="/ringBox.png"
+            <Image
+              src={ringBoxImg}
               alt="Ring Box"
               className="w-full h-full object-contain scale-x-[-1] -rotate-6"
             />
@@ -151,8 +170,8 @@ function InvitationContent() {
             style={{ scale: ringScale, x: ringX, y: ringY }}
             className="absolute bottom-[-70px] left-[30px] w-28 z-20 origin-center"
           >
-            <img
-              src="/ring.png"
+            <Image
+              src={ringImg}
               alt="Ring"
               className="w-full h-full object-contain -rotate-12"
             />
@@ -162,9 +181,9 @@ function InvitationContent() {
 
       <div className="w-full bg-white flex items-center justify-start mt-3 relative overflow-visible">
         {/* Background Image (Behind) */}
-        <motion.img
+        <MotionImage
           style={{ opacity: layerOpacity }}
-          src="/layer9.png"
+          src={layer9Img}
           alt=""
           className="absolute -top-4 right-10 w-auto z-0 pointer-events-none"
         />
@@ -192,9 +211,9 @@ function InvitationContent() {
         </motion.div>
 
         {/* Foreground Image (Front) */}
-        <motion.img
+        <MotionImage
           style={{ opacity: layerOpacity }}
-          src="/layer8.png"
+          src={layer8Img}
           alt=""
           className="absolute -bottom-20 left-0 w-auto z-20 pointer-events-none"
         />
@@ -227,13 +246,13 @@ function InvitationContent() {
           </div>
           {/* Image */}
           <div className="relative z-10">
-            <img src="/imageTwo.png" alt="Couple" className="w-80 object-cover" />
+            <Image src={imageTwoImg} alt="Couple" className="w-80 object-cover" />
           </div>
         </div>
 
 
         <motion.div style={{ y: swanY }} className="flex justify-center -mt-48 z-50 relative">
-          <img src="/swan.png" alt="Swan Decoration" className="w-80 pl-4" />
+          <Image src={swanImg} alt="Swan Decoration" className="w-80 pl-4" />
         </motion.div>
 
         {/* 2. Countdown */}
@@ -243,9 +262,9 @@ function InvitationContent() {
               <div ref={clockRef} className="relative inline-block">
                 <h2 className="text-8xl font-birthstone text-[#E9AD3E] relative leading-none">Countdown</h2>
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-25 z-20 pointer-events-none w-32">
-                  <motion.img
+                  <MotionImage
                     style={{ y: clockY, rotate: clockRotate }}
-                    src="/clock.png"
+                    src={clockImg}
                     alt="Clock"
                     className="w-full opacity-80"
                   />
@@ -288,9 +307,9 @@ function InvitationContent() {
 
         {/* Flying Bird Animation */}
         <div ref={birdRef} className="relative z-50 h-[100px] w-full max-w-sm mx-auto overflow-visible pointer-events-none">
-          <motion.img
+          <MotionImage
             style={{ x: birdX, y: birdY }}
-            src="/kabutar.png"
+            src={kabutarImg}
             alt="Flying Bird"
             className="w-28 absolute -right-4 bottom-10 scale-x-[1]"
           />
@@ -299,21 +318,21 @@ function InvitationContent() {
 
       <div className="w-full -mt-10">
         <div className="relative flex flex-col justify-center items-center w-full">
-          <img
-            src="/full.png"
+          <Image
+            src={fullImg}
             alt="Couple Full Portrait"
             className="w-full max-w-[50%] rotate-180 rounded-xl relative -top-30 left-24"
           />
           <div ref={inviteesRef} className="relative z-10 -mt-80 w-full ml-10">
-            <motion.img
+            <MotionImage
               style={{ rotate: inviteesRotate }}
-              src="/invitees.png"
+              src={inviteesImg}
               alt="Invitees List"
               className="w-full h-auto drop-shadow-md max-w-90"
             />
           </div>
-          <img
-            src="/full.png"
+          <Image
+            src={fullImg}
             alt="Decoration Bottom Left"
             className="absolute -bottom-20 -left-14 w-72 z-20 blur-[6px]"
           />
@@ -360,7 +379,7 @@ function InvitationContent() {
       {/* Footer Logos */}
       <div className="flex flex-col justify-center items-center relative bg-transparent min-h-[calc(100vh-20px)] overflow-hidden">
 
-        <img src="/pinkRose.png" alt="Background Rose" className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[120%] max-w-lg opacity-80 z-0 pointer-events-none" />
+        <Image src={pinkRoseImg} alt="Background Rose" className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[120%] max-w-lg opacity-80 z-0 pointer-events-none" />
 
         <motion.p
           ref={blessingsRef}
@@ -371,7 +390,7 @@ function InvitationContent() {
         </motion.p>
 
         <div className="relative z-10 mt-6">
-          <img src="/groupLogo.png" alt="Group Logo" className="w-64 h-auto object-contain opacity-90" />
+          <Image src={groupLogoImg} alt="Group Logo" className="w-64 h-auto object-contain opacity-90" />
         </div>
       </div>
     </main >

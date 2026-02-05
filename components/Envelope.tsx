@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function Envelope({ onOpen }: { onOpen: () => void }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -31,14 +32,16 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
             >
 
                 {/* 3. Bottom Flap */}
-                <img
-                    src="/lowerflap.png"
-                    alt="Bottom Flap"
-                    className="absolute bottom-0 left-0 right-0 w-full h-full object-cover z-25 pointer-events-none"
-                    style={{
-                        maskImage: "linear-gradient(to top, black 80%, transparent 100%)"
-                    }}
-                />
+                <div className="absolute bottom-0 left-0 right-0 w-full h-full z-25 pointer-events-none"
+                    style={{ maskImage: "linear-gradient(to top, black 80%, transparent 100%)" }}>
+                    <Image
+                        src="/lowerflap.png"
+                        alt="Bottom Flap"
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                </div>
 
                 {/* 4. Top Flap (Animates Open) */}
                 <motion.div
@@ -56,11 +59,15 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                         transformStyle: "preserve-3d",
                     }}
                 >
-                    <img
-                        src="/upperflap.png"
-                        alt="Top Flap"
-                        className="absolute inset-0 w-full h-full scale-110"
-                    />
+                    <div className="absolute inset-0 w-full h-full scale-110">
+                        <Image
+                            src="/upperflap.png"
+                            alt="Top Flap"
+                            fill
+                            className="object-cover"
+                            priority
+                        />
+                    </div>
 
 
                 </motion.div>

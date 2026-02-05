@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   title: "Abhay & Dhruvi | Engagement Invitation",
   description: "Join us in celebrating our engagement ceremony",
   icons: {
-    icon: "/adwaxseal.png",
+    icon: "/thumbnail.jpeg",
   },
 };
 
