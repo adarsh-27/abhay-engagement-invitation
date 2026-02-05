@@ -33,9 +33,7 @@ const dmSerifDisplay = DM_Serif_Display({
 export const metadata: Metadata = {
   title: "Abhay & Dhruvi | Engagement Invitation",
   description: "Join us in celebrating our engagement ceremony",
-  icons: {
-    icon: "/thumbnail.jpeg",
-  },
+
 };
 
 export default function RootLayout({
