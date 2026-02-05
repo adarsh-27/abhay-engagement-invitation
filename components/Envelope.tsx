@@ -1,9 +1,17 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Envelope({ onOpen }: { onOpen: () => void }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [showHint, setShowHint] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowHint(false);
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, []);
 
     const handleOpen = () => {
         if (isOpen) return;
@@ -18,7 +26,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                 style={{ overflow: isOpen ? "visible" : "hidden" }}
                 onClick={handleOpen}
                 initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
+                animate={{ scale: isOpen ? 1.1 : 1, opacity: 1 }}
                 transition={{ duration: 1 }}
             >
 
@@ -66,7 +74,34 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                 >
                     This invitation is<br />exclusively for you
                 </motion.p>
+
+                <motion.p
+                    className="absolute bottom-20 left-0 right-0 text-center font-poppins z-50 pointer-events-none text-[#633d5c]/80 text-sm tracking-widest uppercase animate-pulse"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: (showHint && !isOpen) ? 1 : 0 }}
+                    transition={{ duration: 0.8 }}
+                >
+                    ( Tap to Open )
+                </motion.p>
             </motion.div>
         </div>
     );
 }
+
+{/* 
+            <div className="text-center">
+              <h3 className="text-5xl font-birthstone text-[#E9AD3E] mb-2">Invitees</h3>
+              <div className="mb-4">
+                <p className="text-[#633d5c] font-dm-serif text-xl tracking-normal">G J Unagar</p>
+                <p className="text-[#633d5c] font-poppins text-[15px] tracking-normal">+91 94272 00969</p>
+              </div>
+              <div className="mb-4">
+                <p className="text-[#633d5c] font-dm-serif text-xl tracking-normal">J J Unagar</p>
+                <p className="text-[#633d5c] font-poppins text-[15px] tracking-normal">+91 94283 45834</p>
+              </div>
+              <div className="mb-4">
+                <p className="text-[#633d5c] font-dm-serif text-xl tracking-normal">M J Unagar</p>
+                <p className="text-[#633d5c] font-poppins text-[15px] tracking-normal">+91 99250 30101</p>
+              </div>
+            </div>
+             */}

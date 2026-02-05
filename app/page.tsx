@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Envelope from "@/components/Envelope";
-import { Reveal } from "@/components/Reveal";
 
 function InvitationContent() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -25,6 +24,38 @@ function InvitationContent() {
   const dateY = useTransform(dateProgress, [0, 0.25, 0.5, 0.75, 1], [0, 50, 0, -50, 0]);
 
   const swanY = useTransform(dateProgress, [0, 0.25, 1, 0.25, 1], [0, 30, 0, -30, 0]);
+
+  const clockRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: clockProgress } = useScroll({
+    target: clockRef,
+    offset: ["start end", "end start"]
+  });
+  const clockY = useTransform(clockProgress, [0, 1], [30, -60]);
+  const clockRotate = useTransform(clockProgress, [0, 1], [0, -45]);
+
+  const inviteesRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: inviteesProgress } = useScroll({
+    target: inviteesRef,
+    offset: ["start end", "end start"]
+  });
+  const inviteesRotate = useTransform(inviteesProgress, [0, 1], [-10, 10]);
+
+  const birdRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: birdProgress } = useScroll({
+    target: birdRef,
+    offset: ["start end", "end start"]
+  });
+  const birdX = useTransform(birdProgress, [0, 1], [100, -200]);   // Right to Left
+  const birdY = useTransform(birdProgress, [0, 1], [0, -150]);      // Slight diagonal up
+
+  const blessingsRef = useRef<HTMLParagraphElement>(null);
+  const { scrollYProgress: blessingsProgress } = useScroll({
+    target: blessingsRef,
+    offset: ["start 0.9", "center 0.6"]
+  });
+  const blessingsOpacity = useTransform(blessingsProgress, [0, 1], [0, 1]);
+  const blessingsScale = useTransform(blessingsProgress, [0, 1], [0.8, 1]);
+  const blessingsY = useTransform(blessingsProgress, [0, 0.25, 0.5, 0.75, 1], [0, 20, 0, -20, 0]);
 
   useEffect(() => {
     const targetDate = new Date("2026-02-19T09:00:00");
@@ -129,7 +160,7 @@ function InvitationContent() {
         </motion.div>
       </div>
 
-      <div className="w-full bg-white flex items-center justify-start -mt-8 relative overflow-visible">
+      <div className="w-full bg-white flex items-center justify-start mt-3 relative overflow-visible">
         {/* Background Image (Behind) */}
         <motion.img
           style={{ opacity: layerOpacity }}
@@ -206,92 +237,96 @@ function InvitationContent() {
         </motion.div>
 
         {/* 2. Countdown */}
-        <div className="relative w-full min-h-screen flex flex-col items-center justify-start py-10">
-          <img
-            src="/countdownBackground.png"
-            alt="Countdown Background"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] max-w-3xl z-10 pointer-events-none select-none"
-          />
-
-          <div className="pt-25">
+        <div className="relative w-full min-h-[calc(100vh-100px)] flex flex-col items-center justify-start">
+          <div className="pt-20">
             <div className="text-center mb-8 relative z-10">
-              <h2 className="text-5xl font-birthstone text-[#E9AD3E] mb-2">Countdown</h2>
-              <p className="text-[#633d5c] font-poppins text-lg tracking-wide">To the most special day</p>
+              <div ref={clockRef} className="relative inline-block">
+                <h2 className="text-8xl font-birthstone text-[#E9AD3E] relative leading-none">Countdown</h2>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-25 z-20 pointer-events-none w-32">
+                  <motion.img
+                    style={{ y: clockY, rotate: clockRotate }}
+                    src="/clock.png"
+                    alt="Clock"
+                    className="w-full opacity-80"
+                  />
+                </div>
+              </div>
+              <p className="text-[#633d5c] font-poppins text-lg tracking-wide -mt-4">To the most special day</p>
             </div>
 
             <div className="grid grid-cols-2 gap-6 text-center max-w-sm mx-auto relative z-10 px-4">
               {/* Days */}
-              <div className="relative bg-transparent rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.3)] border border-[#D4AF37] aspect-square flex flex-col items-center justify-center min-w-[140px]">
+              <div className="relative bg-transparent rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-[#D4AF37] aspect-square flex flex-col items-center justify-center min-w-[140px]">
                 <div className="absolute inset-0.5 border border-[#D4AF37] rounded-xl opacity-60 pointer-events-none"></div>
                 <span className="text-6xl font-dm-serif text-[#6D4C41] z-10">{timeLeft.days}</span>
                 <span className="text-[10px] uppercase tracking-[0.3em] font-medium text-[#8D6E63] z-10 mt-2">Days</span>
               </div>
 
               {/* Hours */}
-              <div className="relative bg-transparent rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.3)] border border-[#D4AF37] aspect-square flex flex-col items-center justify-center min-w-[140px]">
+              <div className="relative bg-transparent rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-[#D4AF37] aspect-square flex flex-col items-center justify-center min-w-[140px]">
                 <div className="absolute inset-0.5 border border-[#D4AF37] rounded-xl opacity-60 pointer-events-none"></div>
                 <span className="text-6xl font-dm-serif text-[#6D4C41] z-10">{timeLeft.hours}</span>
                 <span className="text-[10px] uppercase tracking-[0.3em] font-medium text-[#8D6E63] z-10 mt-2">Hours</span>
               </div>
 
               {/* Minutes */}
-              <div className="relative bg-transparent rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.3)] border border-[#D4AF37] aspect-square flex flex-col items-center justify-center min-w-[140px]">
+              <div className="relative bg-transparent rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-[#D4AF37] aspect-square flex flex-col items-center justify-center min-w-[140px]">
                 <div className="absolute inset-0.5 border border-[#D4AF37] rounded-xl opacity-60 pointer-events-none"></div>
                 <span className="text-6xl font-dm-serif text-[#6D4C41] z-10">{timeLeft.minutes}</span>
                 <span className="text-[10px] uppercase tracking-[0.3em] font-medium text-[#8D6E63] z-10 mt-2">Minutes</span>
               </div>
 
               {/* Seconds */}
-              <div className="relative bg-transparent rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.3)] border border-[#D4AF37] aspect-square flex flex-col items-center justify-center min-w-[140px]">
+              <div className="relative bg-transparent rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-[#D4AF37] aspect-square flex flex-col items-center justify-center min-w-[140px]">
                 <div className="absolute inset-0.5 border border-[#D4AF37] rounded-xl opacity-60 pointer-events-none"></div>
                 <span className="text-6xl font-dm-serif text-[#6D4C41] z-10">{timeLeft.seconds}</span>
                 <span className="text-[10px] uppercase tracking-[0.3em] font-medium text-[#8D6E63] z-10 mt-2">Seconds</span>
               </div>
             </div>
           </div>
-
         </div>
 
-        <div className="relative flex flex-col justify-center items-center mb-16 p-12">
-          {/* Frame Background */}
-          <img
-            src="/frame.png"
-            alt="Decorative Frame"
-            className="absolute inset-0 w-full h-full object-fill z-0 opacity-90 pointer-events-none"
+        {/* Flying Bird Animation */}
+        <div ref={birdRef} className="relative z-50 h-[100px] w-full max-w-sm mx-auto overflow-visible pointer-events-none">
+          <motion.img
+            style={{ x: birdX, y: birdY }}
+            src="/kabutar.png"
+            alt="Flying Bird"
+            className="w-28 absolute -right-4 bottom-10 scale-x-[1]"
           />
+        </div>
+      </div>
 
+      <div className="w-full -mt-10">
+        <div className="relative flex flex-col justify-center items-center w-full">
           <img
             src="/full.png"
             alt="Couple Full Portrait"
-            className="w-full max-w-[80%] rotate-130 rounded-xl relative -top-35"
+            className="w-full max-w-[50%] rotate-180 rounded-xl relative -top-30 left-24"
           />
-          <div className="relative z-10 flex flex-col items-center -mt-60">
-            <div className="text-center">
-              <h3 className="text-5xl font-birthstone text-[#E9AD3E] mb-2">Invitees</h3>
-              <div className="mb-4">
-                <p className="text-[#633d5c] font-dm-serif text-xl tracking-normal">G J Unagar</p>
-                <p className="text-[#633d5c] font-poppins text-[15px] tracking-normal">+91 94272 00969</p>
-              </div>
-              <div className="mb-4">
-                <p className="text-[#633d5c] font-dm-serif text-xl tracking-normal">J J Unagar</p>
-                <p className="text-[#633d5c] font-poppins text-[15px] tracking-normal">+91 94283 45834</p>
-              </div>
-              <div className="mb-4">
-                <p className="text-[#633d5c] font-dm-serif text-xl tracking-normal">M J Unagar</p>
-                <p className="text-[#633d5c] font-poppins text-[15px] tracking-normal">+91 99250 30101</p>
-              </div>
-            </div>
+          <div ref={inviteesRef} className="relative z-10 -mt-80 w-full ml-10">
+            <motion.img
+              style={{ rotate: inviteesRotate }}
+              src="/invitees.png"
+              alt="Invitees List"
+              className="w-full h-auto drop-shadow-md max-w-90"
+            />
           </div>
+          <img
+            src="/full.png"
+            alt="Decoration Bottom Left"
+            className="absolute -bottom-20 -left-14 w-72 z-20 blur-[6px]"
+          />
         </div>
 
         {/* 3. Map Section */}
-        <div>
+        <div className="px-6 mt-10">
           <div className="text-center mb-8">
-            <h2 className="text-5xl font-birthstone text-[#E9AD3E] mb-2">Location</h2>
-            <p className="text-[#633d5c] font-poppins text-lg tracking-wide">Join us at the venue</p>
+            <h2 className="text-7xl font-birthstone text-[#E9AD3E] mb-2 relative z-10">Location</h2>
+            <p className="text-[#633d5c] font-poppins text-lg tracking-wide -mt-4">Join us at the venue</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-[#E9AD3E]/20">
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-[#E9AD3E]/20 min-w-72 w-72 mx-auto" >
             {/* Map Iframe */}
             <div className="w-full h-64 bg-gray-100">
               <iframe
@@ -313,7 +348,7 @@ function InvitationContent() {
                 href="https://www.google.com/maps/dir//Sardarnagar+Society+Comunity+Hall,+Rajkot+patel+boding,+26-1,+Sardar+Nagar,+Rd+2a,+Om+Nagar,+Rajkot,+Gujarat+360004/@22.2701913,70.7853247,15z"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-8 py-3 bg-[#633d5c] text-white font-serif rounded-full shadow-md hover:bg-[#6b7d58] transition-colors"
+                className="inline-block px-8 py-3 bg-[#633d5c] text-white font-serif rounded-2xl shadow-md hover:bg-[#633d5c] transition-colors"
               >
                 Get Directions
               </a>
@@ -321,19 +356,25 @@ function InvitationContent() {
           </div>
         </div>
 
-        {/* Footer Logos */}
-        <div className="flex justify-center items-center gap-6 mt-12">
-          <img src="/fLogo.png" alt="F Logo" className="h-20 w-auto object-contain opacity-80" />
-          <img src="/dcLogo.png" alt="DC Logo" className="h-20 w-auto object-contain opacity-80" />
+      </div>
+      {/* Footer Logos */}
+      <div className="flex flex-col justify-center items-center relative bg-transparent min-h-[calc(100vh-20px)] overflow-hidden">
+
+        <img src="/pinkRose.png" alt="Background Rose" className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[120%] max-w-lg opacity-80 z-0 pointer-events-none" />
+
+        <motion.p
+          ref={blessingsRef}
+          style={{ opacity: blessingsOpacity, scale: blessingsScale, y: blessingsY }}
+          className="text-[#633d5c] font-dm-serif text-4xl relative z-10 w-60 text-left flex items-start justify-start"
+        >
+          With the Blessings and Warm Presence of
+        </motion.p>
+
+        <div className="relative z-10 mt-6">
+          <img src="/groupLogo.png" alt="Group Logo" className="w-64 h-auto object-contain opacity-90" />
         </div>
       </div>
-
-      {/* Bottom Floral Decoration */}
-      <div className="flex justify-between items-end w-full">
-        <img src="/full.png" alt="Decoration Left" className="w-40 md:w-56 object-contain opacity-90" />
-        <img src="/full.png" alt="Decoration Right" className="w-40 md:w-56 object-contain opacity-90 scale-x-[-1]" />
-      </div>
-    </main>
+    </main >
   );
 }
 
