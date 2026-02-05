@@ -66,15 +66,6 @@ function InvitationContent() {
   const birdX = useTransform(birdProgress, [0, 1], [100, -200]);   // Right to Left
   const birdY = useTransform(birdProgress, [0, 1], [0, -150]);      // Slight diagonal up
 
-  const blessingsRef = useRef<HTMLParagraphElement>(null);
-  const { scrollYProgress: blessingsProgress } = useScroll({
-    target: blessingsRef,
-    offset: ["start 0.9", "center 0.6"]
-  });
-  const blessingsOpacity = useTransform(blessingsProgress, [0, 1], [0, 1]);
-  const blessingsScale = useTransform(blessingsProgress, [0, 1], [0.8, 1]);
-  const blessingsY = useTransform(blessingsProgress, [0, 0.25, 0.5, 0.75, 1], [0, 20, 0, -20, 0]);
-
   useEffect(() => {
     const targetDate = new Date("2026-02-19T09:00:00");
 
@@ -382,16 +373,24 @@ function InvitationContent() {
         <Image src={pinkRoseImg} alt="Background Rose" className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[120%] max-w-lg opacity-80 z-0 pointer-events-none" />
 
         <motion.p
-          ref={blessingsRef}
-          style={{ opacity: blessingsOpacity, scale: blessingsScale, y: blessingsY }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          viewport={{ once: true }}
           className="text-[#633d5c] font-dm-serif text-4xl relative z-10 w-60 text-left flex items-start justify-start"
         >
           With the Blessings and Warm Presence of
         </motion.p>
 
-        <div className="relative z-10 mt-6">
-          <Image src={groupLogoImg} alt="Group Logo" className="w-64 h-auto object-contain opacity-90" />
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          viewport={{ once: true }}
+          className="relative z-10 mt-20"
+        >
+          <Image src={groupLogoImg} alt="Group Logo" className="w-44 h-auto object-contain opacity-90 " />
+        </motion.div>
       </div>
     </main >
   );
